@@ -21,10 +21,11 @@ const init = connection => {
       //inserir
       console.log('inserir')
       const { name, email, passwd } = req.body
-      await connection.execute('insert into users(name, email, passwd) values(?,?,?)',[
+      await connection.execute('insert into users(name, email, passwd, role) values(?,?,?,?)',[
         name, 
         email, 
-        passwd
+        passwd,
+        'user'
       ])
       res.redirect('/')
     }else{
