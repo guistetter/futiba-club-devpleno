@@ -1,0 +1,5 @@
+# ignore specifc files
+
+# ignore folders and directories
+node_modules
+fsa3-arquivos-apoio
