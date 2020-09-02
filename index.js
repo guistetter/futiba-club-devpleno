@@ -1,13 +1,15 @@
 require('dotenv/config')
 const express = require('express')
 const app = express()
+const bodyParser = require('body-parser')
 const mysql = require('mysql2/promise')
 const port = process.env.PORT || 3000
 
 const account = require('./account')
 
-app.use(express.static('public'))
 app.set('view engine', 'ejs')
+app.use(express.static('public'))
+app.use(bodyParser.urlencoded({extended:true}))
 
 const init = async() => {
   const connection = await mysql.createConnection({
@@ -18,7 +20,7 @@ const init = async() => {
   })
   
   app.use(account(connection))
-  
+
   app.listen(port, err => {
     if(err){
       console.log('Somethin is wrong with server')
