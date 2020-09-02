@@ -6,6 +6,7 @@ const mysql = require('mysql2/promise')
 const port = process.env.PORT || 3000
 
 const account = require('./account')
+const admin = require('./admin')
 
 const app = express()
 
@@ -33,12 +34,13 @@ const init = async() => {
     }else{
       res.locals.user = false
     }
-    console.log(req.session,'----------')
+    // console.log(req.session,'----------')
     next()
   })
 
   app.use(account(connection))
-
+  app.use('/admin', admin(connection))
+  
   app.listen(port, err => {
     if(err){
       console.log('Somethin is wrong with server')
