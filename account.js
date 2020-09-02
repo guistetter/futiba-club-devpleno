@@ -12,7 +12,11 @@ const init = connection => {
   app.get('/login', async(req,res) => {
     res.render('login',{error:false})
   })
-
+  app.get('/logout', (req, res) =>{
+    req.session.destroy(err =>{
+      res.redirect('/')
+    })
+  })
   app.post('/login', async(req, res) =>{
     const [rows, fields] = await connection.execute('select * from users where email = ?', [req.body.email])
     if(rows.length===0){
