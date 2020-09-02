@@ -71,7 +71,7 @@
                     <tr>
                         <th scope="row"><%= game.id %></th>
                         <td><%= game.team_a %> vs <%= game.team_b %></td>
-                        <td>Excluir</td>
+                        <td> <a href="/admin/games/delete/<%= game.id %>"> Excluir</a></td>
                     </tr>
                     <% }) %> 
                 </tbody>
