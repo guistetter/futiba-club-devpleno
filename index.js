@@ -1,15 +1,22 @@
 require('dotenv/config')
 const express = require('express')
-const app = express()
+const session = require('express-session')
 const bodyParser = require('body-parser')
 const mysql = require('mysql2/promise')
 const port = process.env.PORT || 3000
 
 const account = require('./account')
 
+const app = express()
+
 app.set('view engine', 'ejs')
 app.use(express.static('public'))
 app.use(bodyParser.urlencoded({extended:true}))
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: true,
+  saveUninitialized: true
+}))
 
 const init = async() => {
   const connection = await mysql.createConnection({
