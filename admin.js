@@ -28,6 +28,12 @@ app.post('/games', async (req, res) =>{
   ])
   res.redirect('/admin/games')
 })
+app.get('/games/delete/:id', async(req,res) => {
+  await connection.execute('delete from games where id = ? limit 1',[
+    req.params.id
+  ])
+  res.redirect('/admin/games')
+})
 return app
 }
 
