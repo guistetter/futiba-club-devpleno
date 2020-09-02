@@ -92,6 +92,9 @@
                         <i class="fa fa-envelope prefix grey-text"></i>
                         <input type="text" id="orangeForm-email" name="email" class="form-control">
                         <label for="orangeForm-email">Seu e-mail</label>
+                        <% if(error){ %>
+                          <p>E-mail já está em uso.</p>
+                       <% } %>
                     </div>
                 
                     <div class="md-form">
