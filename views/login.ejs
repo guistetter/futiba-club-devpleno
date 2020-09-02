@@ -75,7 +75,9 @@
                         <input type="password" id="orangeForm-pass" name="passwd" class="form-control">
                         <label for="orangeForm-pass">Senha</label>
                     </div>
-                
+                    <% if(error){%>
+                        <p>Usuário e/ou senha inválidos</p>
+                    <% } %>
                     <div class="text-center">
                         <button class="btn btn-deep-orange">Entrar</button>
                     </div>
