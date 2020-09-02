@@ -13,10 +13,21 @@ app.get('/',(req,res)=>{
   res.send('Olá adminnn')
 })
 
-app.get('/games',(req,res)=>{
-  res.send('Olá games')
+app.get('/games' ,async (req,res)=>{
+  const [rows, fields] = await connection.execute('select * from games')
+  res.render('admin/games',{
+    games: rows
+  })
 })
 
+app.post('/games', async (req, res) =>{
+  const {team_a, team_b } = req.body
+  await connection.execute('insert into games (team_a, team_b) values(?,?)',[
+    team_a,
+    team_b
+  ])
+  res.redirect('/admin/games')
+})
 return app
 }
 
