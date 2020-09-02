@@ -9,6 +9,10 @@ const init = connection => {
     res.render('home')
   })
 
+  app.get('/login', async(req,res) => {
+    res.render('login')
+  })
+
   app.get('/new-account',(req,res) =>{
     res.render('new-account',{error:false})
   })
