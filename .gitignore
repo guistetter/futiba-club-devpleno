@@ -2,3 +2,4 @@ ArquivosBaseProjeto
 node_modules
 package-lock.json
 fundamentos.txt
+.env
