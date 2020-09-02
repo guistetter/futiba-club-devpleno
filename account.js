@@ -10,7 +10,28 @@ const init = connection => {
   })
 
   app.get('/login', async(req,res) => {
-    res.render('login')
+    res.render('login',{error:false})
+  })
+
+  app.post('/login', async(req, res) =>{
+    const [rows, fields] = await connection.execute('select * from users where email = ?', [req.body.email])
+    if(rows.length===0){
+      res.render('login',{error: 'Usuario e/ou senha invalidos'})
+    }else{
+      if(rows[0].passwd === req.body.passwd){
+        const userDb = rows[0]
+        const user = {
+          id: userDb.id,
+          name: userDb.name,
+          role: userDb.role
+        }
+        req.session.user = user
+        console.log('logado')
+        res.redirect('/')
+      }else{
+        res.render('login',{error: 'Usuario e/ou senha invalidos'})
+      }
+    }
   })
 
   app.get('/new-account',(req,res) =>{
