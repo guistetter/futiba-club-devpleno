@@ -25,7 +25,18 @@ const init = async() => {
     password: process.env.SQL_PASSWD,
     database: 'futiba'
   })
-  
+
+  //middleware para verificar usuario logado
+  app.use((req,res, next) =>{
+    if(req.session.user){
+      res.locals.user = req.session.user
+    }else{
+      res.locals.user = false
+    }
+    console.log(req.session,'----------')
+    next()
+  })
+
   app.use(account(connection))
 
   app.listen(port, err => {
