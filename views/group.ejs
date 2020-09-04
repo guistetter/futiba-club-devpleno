@@ -38,20 +38,11 @@
 
   <section class="content">
     <div class="container">
-      <h2>Criar Grupos</h2>
       <div class="row">
-        <form class="col" method="post">
-          <div class="md-form">
-            <i class="fa fa-user prefix grey-text"></i>
-            <input type="text" class="form-control" name="name">
-            <label for="orangeForm-name">Nome do grupo</label>
-          </div>
-        
-          <div class="text-center">
-            <button class="btn btn-deep-orange">Criar Grupo</button>
-          </div>
-        </form>
+        <h2>Grupo: <%= group.name %></h2>
       </div>
+      
+      <% if(group.role === 'owner'){ %>
       <% if(pendings.length > 0){ %>
         
         <h2>Usuarios pendentes no grupo</h2>
@@ -69,18 +60,34 @@
             <% pendings.forEach( user => { %> 
               <tr>
                 <th scope="row"><%= user.id %></th>
-                <td><a href="/groups/<%= user.id %>"><%= user.name%></td></a>
-                <td><%= user.role%></td>
-                <% if(user.role === 'owner'){ %>
-                  <td> <a href="/admin/games/delete/<%= group.id %>"> Excluir</a></td>
-                <% } %> 
+                <td>
+                  <a href="/groups/<%= user.id %>">
+                  <%= user.name %>
+                  </a>
+                </td>
+                <td><%= user.role %></td>
+                  <td> 
+                    <a class="btn btn-success btn-sm" href="/groups/<%= group.id %>/pending/<%= user.id %>/yes"> 
+                      Permitir
+                    </a>
+                    <a class="btn btn-warning btn-sm" href="/groups/<%= group.id %>/pending/<%= user.id %>/no"> 
+                      Negar
+                    </a>
+                  </td>
               </tr>
             <% }) %> 
           </tbody>
         </table>
       <% } else { %> 
-        <p class="alert alert-info">Nenhum grupo cadastrado.</p> 
+        <p class="alert alert-info">Este grupo não possui usuarios pendentes.</p> 
         <% } %>
+        <% } %>
+
+        <% if(group.role === 'pending'){%>
+          <p class="alert alert-info"> Aguardando ser aceito pelo administrador do grupo.</p>
+        <% } else { %>
+          <p>usuario normal</p>
+        <% } %> 
     </div>
       
   </section>
