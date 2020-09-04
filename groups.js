@@ -13,7 +13,9 @@ const init = connection =>{
   })
 
   app.get('/', async(req, res) => {
-    const [groups, fields] = await connection.execute('select * from grupos')
+    const [groups, fields] = await connection.execute('SELECT grupos.*, groups_users.role FROM grupos left join groups_users on grupos.id = groups_users.group_id and groups_users.user_id = ?',[
+      req.session.user.id
+    ])
     res.render('groups',{
       groups: groups
     })
