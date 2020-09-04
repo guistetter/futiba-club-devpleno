@@ -31,9 +31,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `futiba`.`groups`
+-- Table `futiba`.`grupos`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `futiba`.`groups` (
+CREATE TABLE IF NOT EXISTS `futiba`.`grupos` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NULL,
   PRIMARY KEY (`id`))
@@ -41,24 +41,24 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `futiba`.`groups_users`
+-- Table `futiba`.`grupos_users`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `futiba`.`groups_users` (
+CREATE TABLE IF NOT EXISTS `futiba`.`grupos_users` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `user_id` INT NOT NULL,
   `group_id` INT NOT NULL,
   `role` VARCHAR(45) NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_groups_users_users_idx` (`user_id` ASC),
-  INDEX `fk_groups_users_groups1_idx` (`group_id` ASC),
-  CONSTRAINT `fk_groups_users_users`
+  INDEX `fk_grupos_users_users_idx` (`user_id` ASC),
+  INDEX `fk_grupos_users_grupos1_idx` (`group_id` ASC),
+  CONSTRAINT `fk_grupos_users_users`
     FOREIGN KEY (`user_id`)
     REFERENCES `futiba`.`users` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `fk_groups_users_groups1`
+  CONSTRAINT `fk_grupos_users_grupos1`
     FOREIGN KEY (`group_id`)
-    REFERENCES `futiba`.`groups` (`id`)
+    REFERENCES `futiba`.`grupos` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
@@ -90,16 +90,16 @@ CREATE TABLE IF NOT EXISTS `futiba`.`guessings` (
   `user_id` INT NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_guessings_games1_idx` (`game_id` ASC),
-  INDEX `fk_guessings_groups1_idx` (`group_id` ASC),
+  INDEX `fk_guessings_grupos1_idx` (`group_id` ASC),
   INDEX `fk_guessings_users1_idx` (`user_id` ASC),
   CONSTRAINT `fk_guessings_games1`
     FOREIGN KEY (`game_id`)
     REFERENCES `futiba`.`games` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `fk_guessings_groups1`
+  CONSTRAINT `fk_guessings_grupos1`
     FOREIGN KEY (`group_id`)
-    REFERENCES `futiba`.`groups` (`id`)
+    REFERENCES `futiba`.`grupos` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `fk_guessings_users1`
