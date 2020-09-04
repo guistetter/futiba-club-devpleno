@@ -7,6 +7,7 @@ const port = process.env.PORT || 3000
 
 const account = require('./account')
 const admin = require('./admin')
+const groups = require('./groups')
 
 const app = express()
 
@@ -40,7 +41,8 @@ const init = async() => {
 
   app.use(account(connection))
   app.use('/admin', admin(connection))
-  
+  app.use('/groups', groups(connection))
+   
   app.listen(port, err => {
     if(err){
       console.log('Somethin is wrong with server')
