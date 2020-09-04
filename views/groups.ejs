@@ -61,6 +61,7 @@
             <tr>
               <th>#</th>
               <th>Grupos</th>
+              <th>Papel</th>
               <th>Ações</th>
             </tr>
           </thead>
@@ -69,7 +70,13 @@
               <tr>
                 <th scope="row"><%= group.id %></th>
                 <td><%= group.name%></td>
-                <td> <a href="/admin/games/delete/<%= group.id %>"> Excluir</a></td>
+                <td><%= group.role%></td>
+                <% if(group.role === 'owner'){ %>
+                  <td> <a href="/admin/games/delete/<%= group.id %>"> Excluir</a></td>
+                <% } %> 
+                <% if(!group.role){ %>
+                  <td> <a href="/admin/games/delete/<%= group.id %>"> Solicitar entrada</a></td>
+                <% } %> 
               </tr>
             <% }) %> 
           </tbody>
