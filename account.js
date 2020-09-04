@@ -60,7 +60,7 @@ const init = connection => {
       ])
       // console.log(inserted)
       const user = {
-        id: inserted.insertedId,
+        id: inserted.insertId,
         name: name,
         role: 'user'
       }
