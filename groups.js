@@ -20,14 +20,20 @@ const init = connection =>{
   })
 
   app.post('/', async(req, res)=>{
-    await connection.execute('insert into grupos(name) values(?)',[
+   const [inserted, insertedFields] = await connection.execute('insert into grupos(name) values(?)',[
       req.body.name
+    ])
+    //criando relacionamento entre usuario e grupo
+    await connection.execute('insert into groups_users(group_id, user_id, role) values(?,?,?)',[
+      inserted.insertId,
+      req.session.user.id,
+      'owner'
     ])
     res.redirect('/groups')
   })
 
   return app
-  
+
 }
 
 module.exports = init
