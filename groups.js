@@ -18,19 +18,49 @@ const init = connection =>{
       req.session.user.id
     ])
     res.render('groups',{
-      groups: groups
+      groups
     })
   })
 
   //Rota para qdo clicar no grupo, ir pra pagina detalhada do grupo
   app.get('/:id', async(req, res) => {
     //query para listar usuarios pendenntes em determinado grupo
-    const [pendings] = await connection.execute("SELECT * FROM groups_users inner join users on groups_users.user_id = users.id and groups_users.group_id = ? and groups_users.role like 'pending'",[
+    const [group] = await connection.execute('SELECT grupos.*, groups_users.role from grupos left join groups_users on groups_users.group_id = grupos.id and groups_users.user_id = ? where grupos.id = ? ',[
+      req.session.user.id,
+      req.params.id
+    ])
+    const [pendings] = await connection.execute("SELECT groups_users.*, users.name FROM groups_users inner join users on groups_users.user_id = users.id and groups_users.group_id = ? and groups_users.role like 'pending'",[
       req.params.id
     ])
     res.render('group',{
-      pendings
+      pendings,
+      group:group[0]
     })
+  })
+
+  //url para aceitar um usuario "primeiro id é do grupo e o segundo é do user."
+  app.get('/:id/pending/:idGU/:op', async(req,res) => {
+    const [group] = await connection.execute('SELECT groups_users.*, groups_users.role from grupos left join groups_users on groups_users.group_id = grupos.id and groups_users.user_id = ? where grupos.id = ? ',[
+      req.session.user.id,
+      req.params.id
+    ])
+    if(group.length === 0 || group[0].role !== 'owner'){
+      res.redirect('/groups/'+req.params.id)
+    }else{
+      //pegando id do usuario e aprovando/naoaprovando
+      if(req.params.op === 'yes'){
+        await connection.execute('update groups_users set role = "user" where id = ? limit 1',[
+          req.params.idGU
+        ])
+        res.redirect('/groups/'+req.params.id)
+      } else {
+        // se nao aceitar apaga o pedido
+        await connection.execute('delete from groups_users where id = ? limit 1',[
+          req.params.idGU
+        ])
+        res.redirect('/groups/'+req.params.id)
+      }
+    }
   })
 
   //rota para pedir solicitação para entrar em um grupo
