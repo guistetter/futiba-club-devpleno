@@ -86,7 +86,27 @@
         <% if(group.role === 'pending'){%>
           <p class="alert alert-info"> Aguardando ser aceito pelo administrador do grupo.</p>
         <% } else { %>
-          <p>usuario normal</p>
+          <form method="POST">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Jogos</th>
+                <th>Pontuação</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% games.forEach( game => { %> 
+                <tr>
+                  <td> 
+                    <input class="form-control" name="team_<%= game.id %>[a]"> <%= game.team_a %> vs <%= game.team_b %> <input class="form-control" name="team_<%= game.id %>[b]">
+                  </td>
+                  <td>100</td>
+                </tr>
+              <% }) %> 
+            </tbody>
+          </table>
+          <input type="submit" value="Salvar apostas">
+        </form>
         <% } %> 
     </div>
       
