@@ -86,6 +86,7 @@
         <% if(group.role === 'pending'){%>
           <p class="alert alert-info"> Aguardando ser aceito pelo administrador do grupo.</p>
         <% } else { %>
+          <pre><%= JSON.stringify(games) %></pre>
           <form method="POST">
           <table class="table table-striped">
             <thead>
@@ -97,8 +98,19 @@
             <tbody>
               <% games.forEach( game => { %> 
                 <tr>
-                  <td> 
-                    <input class="form-control" name="team_<%= game.id %>[a]"> <%= game.team_a %> vs <%= game.team_b %> <input class="form-control" name="team_<%= game.id %>[b]">
+                  <td>
+                    <% if(game.guess_a){ %>
+                      <%= game.guess_a %>
+                      <%  } else { %>
+                    <input class="form-control" name="team_<%= game.id %>[a]"> 
+                    <% } %>
+                    <%= game.team_a %> vs <%= game.team_b %> 
+                    
+                    <% if(game.guess_b){ %>
+                      <%= game.guess_b %>
+                      <%  } else { %>
+                    <input class="form-control" name="team_<%= game.id %>[b]">
+                    <% } %>
                   </td>
                   <td>100</td>
                 </tr>
@@ -109,7 +121,6 @@
         </form>
         <% } %> 
     </div>
-      
   </section>
   
   <footer class="page-footer center-on-small-only">
