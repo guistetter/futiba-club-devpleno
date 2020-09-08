@@ -1,4 +1,5 @@
 const express = require('express')
+const { connect } = require('mysql2')
 const app = express.Router()
 
 const init = connection =>{
@@ -32,18 +33,22 @@ const init = connection =>{
     const [pendings] = await connection.execute("SELECT groups_users.*, users.name FROM groups_users inner join users on groups_users.user_id = users.id and groups_users.group_id = ? and groups_users.role like 'pending'",[
       req.params.id
     ])
+    const [games] = await connection.execute('select * from games')
     res.render('group',{
       pendings,
-      group:group[0]
+      group:group[0],
+      games
     })
   })
 
   //url para aceitar um usuario "primeiro id é do grupo e o segundo é do user."
   app.get('/:id/pending/:idGU/:op', async(req,res) => {
+
     const [group] = await connection.execute('SELECT groups_users.*, groups_users.role from grupos left join groups_users on groups_users.group_id = grupos.id and groups_users.user_id = ? where grupos.id = ? ',[
       req.session.user.id,
       req.params.id
     ])
+
     if(group.length === 0 || group[0].role !== 'owner'){
       res.redirect('/groups/'+req.params.id)
     }else{
