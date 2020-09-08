@@ -102,10 +102,33 @@ const init = connection =>{
 
   //Rotas para apostas dos jogos
   app.post('/:id', async(req, res) =>{
-    await connection.execute('insert into guessings (result_a, result_b, game_id, group_id, user_id) values (?,?,?,?,?)',[
-      
-    ])
-    res.send(req.body)
+    //logica para pegar o jogo em si e as apostas feitas no times deste jogo
+    const guessings = []
+    Object
+    .keys(req.body)
+    .forEach(team =>{
+      const parts = team.split('_')
+      const game ={
+        game_id: parts[1],
+        result_a: req.body[team].a,
+        result_b: req.body[team].b
+      }
+      guessings.push(game)
+    })
+
+    //Logica para tratar N insercoes simultaneas
+    const batch = guessings.map(guess => {
+      return connection.execute('insert into guessings (result_a, result_b, game_id, group_id, user_id) values (?,?,?,?,?)',[  
+      guess.result_a,
+      guess.result_b,
+      guess.game_id,
+      req.params.id, 
+      req.session.user.id
+      ])
+    })
+    //passando conjunto de promises, map nao aceita await dentro dele
+    await Promise.all(batch)
+    res.redirect('/groups/'+req.params.id)
   })
 
   return app
