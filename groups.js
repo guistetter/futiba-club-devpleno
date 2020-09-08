@@ -36,7 +36,8 @@ const init = connection =>{
     const [games] = await connection.execute(`
     select games.*, 
     guessings.result_a as guess_a, 
-    guessings.result_b as guess_b 
+    guessings.result_b as guess_b,
+    guessings.score  
     from games 
     left join guessings on games.id = guessings.game_id 
     and 
