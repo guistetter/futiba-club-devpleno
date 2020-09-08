@@ -100,6 +100,14 @@ const init = connection =>{
     res.redirect('/groups')
   })
 
+  //Rotas para apostas dos jogos
+  app.post('/:id', async(req, res) =>{
+    await connection.execute('insert into guessings (result_a, result_b, game_id, group_id, user_id) values (?,?,?,?,?)',[
+      
+    ])
+    res.send(req.body)
+  })
+
   return app
 
 }
