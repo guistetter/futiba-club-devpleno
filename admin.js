@@ -72,6 +72,11 @@ const init = connection =>{
       ])
     })
     await Promise.all(batch)
+    await connection.execute('update games set result_a = ?, result_b = ? where id = ?',[
+      game.result_a, 
+      game.result_b,
+      game.game_id
+    ])
     // console.log(guessings)
   }
   res.redirect('/admin/games')
