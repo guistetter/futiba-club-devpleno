@@ -8,6 +8,7 @@ const port = process.env.PORT || 3000
 const account = require('./account')
 const admin = require('./admin')
 const groups = require('./groups')
+const { NULL } = require('mysql2/lib/constants/types')
 
 const app = express()
 
@@ -42,7 +43,30 @@ const init = async() => {
   app.use(account(connection))
   app.use('/admin', admin(connection))
   app.use('/groups', groups(connection))
-   
+  
+  let classification = null
+  setInterval(() =>{
+    classification = null
+    console.log('limpou a cache')
+  },10000)
+  app.get('/classification', async(req,res) => {
+    if(classification){
+      res.send(classification)
+    }else{
+    const query =
+    `
+      select users.id, users.name, 
+      sum(guessings.score) as score 
+      from users 
+      left join guessings on guessings.user_id = users.id 
+      group by guessings.user_id 
+      order by score desc
+    `
+    const [rows] = await connection.execute(query)
+    res.send(rows)
+  }
+  }) 
+
   app.listen(port, err => {
     if(err){
       console.log('Somethin is wrong with server')
